@@ -6,31 +6,16 @@ import 'package:audioplayer/provider/audio_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AudioSliderWidget extends StatefulWidget {
-  final Duration duration;
-  final Duration position;
-  final Duration bufferedPosition;
-  final ValueChanged<Duration>? onChanged;
-  final ValueChanged<Duration>? onChangeEnd;
-
-  const AudioSliderWidget({
-    Key? key,
-    required this.duration,
-    required this.position,
-    required this.bufferedPosition,
-    this.onChanged,
-    this.onChangeEnd,
-  }) : super(key: key);
-
-  @override
-  AudioSliderWidgetState createState() => AudioSliderWidgetState();
-}
-
-class AudioSliderWidgetState extends State<AudioSliderWidget> {
-  double? _dragValue;
-
-  @override
-  Widget build(BuildContext context) {
+class AudioSliderWidget {
+  static Column sliderBuild(
+    BuildContext context, {
+    required duration,
+    required position,
+    required bufferedPosition,
+    onChanged,
+    onChangeEnd,
+  }) {
+    Duration remaining = duration - position;
     context.read<AudioProvider>().timeOut(remaining);
     return Column(
       children: [
@@ -42,24 +27,23 @@ class AudioSliderWidgetState extends State<AudioSliderWidget> {
           ),
           child: Slider(
             min: 0.0,
-            max: widget.duration.inMilliseconds.toDouble(),
+            max: duration.inMilliseconds.toDouble(),
             value: min(
-              _dragValue ?? widget.position.inMilliseconds.toDouble(),
-              widget.duration.inMilliseconds.toDouble(),
+              context.read<AudioProvider>().dragValue ??
+                  position.inMilliseconds.toDouble(),
+              duration.inMilliseconds.toDouble(),
             ),
             onChanged: (value) {
-              setState(() {
-                _dragValue = value;
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged!(Duration(milliseconds: value.round()));
+              context.read<AudioProvider>().dragValueOnPressed(value);
+              if (onChanged != null) {
+                onChanged!(Duration(milliseconds: value.round()));
               }
             },
             onChangeEnd: (value) {
-              if (widget.onChangeEnd != null) {
-                widget.onChangeEnd!(Duration(milliseconds: value.round()));
+              if (onChangeEnd != null) {
+                onChangeEnd!(Duration(milliseconds: value.round()));
               }
-              _dragValue = null;
+              context.read<AudioProvider>().dragValue = null;
             },
           ),
         ),
@@ -79,6 +63,4 @@ class AudioSliderWidgetState extends State<AudioSliderWidget> {
       ],
     );
   }
-
-  Duration get remaining => widget.duration - widget.position;
 }

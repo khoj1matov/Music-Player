@@ -44,7 +44,8 @@ class AudioBodyWidget {
           stream: context.read<AudioProvider>().positionDataStream,
           builder: (context, snapshot) {
             final positionData = snapshot.data;
-            return AudioSliderWidget(
+            return  AudioSliderWidget.sliderBuild(
+              context,
               duration: positionData?.duration ?? Duration.zero,
               position: positionData?.position ?? Duration.zero,
               bufferedPosition: positionData?.bufferedPosition ?? Duration.zero,
@@ -56,9 +57,11 @@ class AudioBodyWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             buttons(
-              icon: Icons.restart_alt,
+              icon: context.watch<AudioProvider>().showReturn
+                  ? Icons.repeat_one_rounded
+                  : Icons.repeat,
               onTap: () {
-                context.read<AudioProvider>().refresh();
+                context.read<AudioProvider>().repeat();
               },
               size: 40,
             ),

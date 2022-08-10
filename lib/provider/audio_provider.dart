@@ -9,6 +9,8 @@ class AudioProvider extends ChangeNotifier {
   List<String> path = SongsDataMock.path;
   int index = 0;
   bool showPlay = false;
+  bool showReturn = false;
+  double? dragValue;
 
   Stream<PositionData> get positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
@@ -27,7 +29,6 @@ class AudioProvider extends ChangeNotifier {
   }
 
   previous() {
-    player.seekToPrevious();
     if (index <= 0) {
       index = path.length - 1;
     } else {
@@ -49,7 +50,6 @@ class AudioProvider extends ChangeNotifier {
   }
 
   next() {
-    player.seekToNext();
     if (index >= 3) {
       index = 0;
     } else {
@@ -70,14 +70,37 @@ class AudioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  timeOut(Duration remaining) {
-    if (remaining.toString().substring(0, 7) == "0:00:01") {
-      Future.delayed(
-        const Duration(seconds: 1),
-        () async {
-          await setAsset();
-        },
-      );
+  timeOut(Duration remaining) async {
+    if (showReturn) {
+      if (remaining.toString().substring(0, 7) == "0:00:01") {
+        await Future.delayed(const Duration(seconds: 1), () async {
+          setAsset();
+        });
+      }
+    } else {
+      if (remaining.toString().substring(0, 7) == "0:00:01") {
+        index += 1;
+        if (index > 3) {
+          index = 0;
+        }
+        await setAsset();
+        ;
+        notifyListeners();
+      }
     }
+  }
+
+  repeat() {
+    if (showReturn) {
+      showReturn = !showReturn;
+    } else {
+      showReturn = !showReturn;
+    }
+    notifyListeners();
+  }
+
+  dragValueOnPressed(double v) {
+    dragValue = v;
+    notifyListeners();
   }
 }
