@@ -1,16 +1,1 @@
-# audioplayer
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="./screenshots/home.png" alt="Log In" width="40%"> <img src="./screenshots/drawer.png" alt="Chats" width="40%"> <img src="./screenshots/music.png" alt="Chat" width="40%"> <img src="./screenshots/menu.png" alt="Info" width="40%"> <img src="./screenshots/info.png" alt="Info2" width="40%"><img src="./screenshots/gallery.png" alt="Contacts" width="40%"> <img src="./screenshots/image.png" alt="Settings" width="40%"> <img src="./screenshots/share.png" alt="Edit Profile" width="40%">
