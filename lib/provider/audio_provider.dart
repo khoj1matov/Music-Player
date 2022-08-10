@@ -15,8 +15,11 @@ class AudioProvider extends ChangeNotifier {
         player.positionStream,
         player.bufferedPositionStream,
         player.durationStream,
-        (position, bufferedPosition, duration) =>
-            PositionData(position, bufferedPosition, duration ?? Duration.zero),
+        (position, bufferedPosition, duration) => PositionData(
+          position,
+          bufferedPosition,
+          duration ?? Duration.zero,
+        ),
       );
 
   refresh() {
@@ -65,5 +68,16 @@ class AudioProvider extends ChangeNotifier {
     player.play();
     setAsset();
     notifyListeners();
+  }
+
+  timeOut(Duration remaining) {
+    if (remaining.toString().substring(0, 7) == "0:00:01") {
+      Future.delayed(
+        const Duration(seconds: 1),
+        () async {
+          await setAsset();
+        },
+      );
+    }
   }
 }

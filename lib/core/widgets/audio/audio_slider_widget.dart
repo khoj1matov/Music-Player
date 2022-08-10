@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:audioplayer/core/components/text_style_comp.dart';
 import 'package:audioplayer/core/constants/color_const.dart';
+import 'package:audioplayer/provider/audio_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AudioSliderWidget extends StatefulWidget {
   final Duration duration;
@@ -29,6 +31,7 @@ class AudioSliderWidgetState extends State<AudioSliderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AudioProvider>().timeOut(remaining);
     return Column(
       children: [
         SliderTheme(
@@ -40,8 +43,10 @@ class AudioSliderWidgetState extends State<AudioSliderWidget> {
           child: Slider(
             min: 0.0,
             max: widget.duration.inMilliseconds.toDouble(),
-            value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble()),
+            value: min(
+              _dragValue ?? widget.position.inMilliseconds.toDouble(),
+              widget.duration.inMilliseconds.toDouble(),
+            ),
             onChanged: (value) {
               setState(() {
                 _dragValue = value;
